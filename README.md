@@ -1,15 +1,14 @@
 # in-vino-veritas
 
-## Project structure
+## Repo structure
 ```bash
-root
+.
 ├── code
-│   └── feature_generation.py
+│   └── feature_generation.py (takes text data and applies one-hot encoding)
 ├── data
-│   ├── final
-│   │   ├── features.csv
-│   │   └── labels.csv
-│   ├── intermediate
-│   └── raw
+│   ├── final (feature and label data for use in models this project explores)
+│   ├── intermediate (cleaned, separate feature data before merging)
+│   └── raw (data direct from Kaggle)
+├── notebooks (exploration, testing, and documentation)
 └── requirements.txt
 ```
