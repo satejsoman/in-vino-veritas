@@ -1,7 +1,8 @@
 # in-vino-veritas
 
 ## Repo structure
-```bash
+
+```
 .
 ├── code
 │   └── feature_generation.py (takes text data and applies one-hot encoding)
