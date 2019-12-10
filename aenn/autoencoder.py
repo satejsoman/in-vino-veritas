@@ -83,30 +83,14 @@ class Autoencoder():
     def compress_all(self, xs, out_path):
         logging.info("Compressing input of size %s", xs.shape)
         # don't do this - properly vectorize this call
-        pd.DataFrame(np.vstack([aenn.compress(row) for (_, row) in xs.iterrrows()])).to_csv(out_path)
+        pd.DataFrame(np.vstack([self.compress(row) for (_, row) in xs.iterrows()])).to_csv(out_path)
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s|%(levelname)s| %(message)s", datefmt='%Y-%m-%d %H:%M:%S')
     logging.getLogger().setLevel("INFO")
 
     logging.info("Reading in data")
-    # features = pd.read_csv("data/features.csv", header=None)
-
-    aenn2 = Autoencoder([
-        (activations.sigmoid, (10000, 26023)),
-        (activations.sigmoid, (5000, 10000)),
-        (activations.sigmoid, (1000, 5000)),
-        (activations.sigmoid, (100, 1000)),
-        (activations.sigmoid, (50, 100)),
-        (activations.sigmoid, (26023, 50))
-    ])
-
-    aenn1 = Autoencoder([
-        (activations.sigmoid, (10000, 26023)),
-        (activations.sigmoid, (1000, 10000)),
-        (activations.sigmoid, (50, 1000)),
-        (activations.sigmoid, (26023, 50))
-    ])
+    features = pd.read_csv("data/features.csv", header=None)
 
     deep = lambda fn: [
         (fn, (10000, 26023)),
@@ -126,12 +110,14 @@ if __name__ == "__main__":
 
     shallow = lambda fn: [(fn, (50, 26023)), (fn, (26023, 50))]
 
+    # test out some architecutures and training cycles
     epochs = [10, 100, 1000]
     architectures = {"shallow": shallow, "medium": medium, "deep": deep}
-    activation_functions = {"relu": activations.relu,  "sigmoid": activations.sigmoid}
+    activation_functions = {"sigmoid": activations.sigmoid, "relu": activations.relu}
     for ((fn_name, activation_fn), (arch_name, arch_fn)) in product(activation_functions.items(), architectures.items()):
         for e in epochs:
-            print("data/compressed_{}_{}_{}.csv".format(fn_name, arch_name, e))
-            # nn = Autoencoder(arch_fn(activation_fn))
-            # nn.train(features, e)
-            # nn.compress_all(features, "data/compressed_{}_{}_{}.csv".format(fn_name, arch_name, epochs))
+            filename = "data/compressed_{}_{}_{}.csv".format(fn_name, arch_name, e)
+            logging.info("%s %s %s -> %s", fn_name, arch_name, e, filename)
+            nn = Autoencoder(arch_fn(activation_fn))
+            nn.train(features, epochs=e)
+            nn.compress_all(features, filename)
