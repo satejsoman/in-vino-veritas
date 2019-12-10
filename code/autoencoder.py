@@ -1,10 +1,12 @@
 import logging
-from types import SimpleNamespace as ns
 from itertools import product
+from os import path
+from types import SimpleNamespace as ns
 
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+
 
 # (f, f') tuple 
 class Activation():
@@ -52,7 +54,7 @@ class Autoencoder():
         logging.info("Starting training")
         for t in tqdm(range(epochs)):
             # choose random point
-            i = np.random.randint(0, p+1)  
+            i = np.random.randint(0, p)  
 
             # feed forward 
             a[0] = np.array(x.iloc[i]).reshape((n, 1))
@@ -82,8 +84,10 @@ class Autoencoder():
 
     def compress_all(self, xs, out_path):
         logging.info("Compressing input of size %s", xs.shape)
-        # don't do this - properly vectorize this call
-        pd.DataFrame(np.vstack([self.compress(row) for (_, row) in xs.iterrows()])).to_csv(out_path)
+        out = np.vstack([self.compress(row).T for (_, row) in tqdm(xs.iterrows())])
+        logging.info("Writing out compressed output")
+        np.savetxt(out_path, out, delimiter=",")
+        
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s|%(levelname)s| %(message)s", datefmt='%Y-%m-%d %H:%M:%S')
@@ -111,13 +115,16 @@ if __name__ == "__main__":
     shallow = lambda fn: [(fn, (50, 26023)), (fn, (26023, 50))]
 
     # test out some architecutures and training cycles
-    epochs = [10, 100, 1000]
+    epochs = [10, 100, 1000, 10000]
     architectures = {"shallow": shallow, "medium": medium, "deep": deep}
     activation_functions = {"sigmoid": activations.sigmoid, "relu": activations.relu}
     for ((fn_name, activation_fn), (arch_name, arch_fn)) in product(activation_functions.items(), architectures.items()):
         for e in epochs:
             filename = "data/compressed_{}_{}_{}.csv".format(fn_name, arch_name, e)
-            logging.info("%s %s %s -> %s", fn_name, arch_name, e, filename)
-            nn = Autoencoder(arch_fn(activation_fn))
-            nn.train(features, epochs=e)
-            nn.compress_all(features, filename)
+            if path.exists(filename):
+                logging.info("target %s exists, skipping", filename)
+            else: 
+                logging.info("%s %s %s -> %s", fn_name, arch_name, e, filename)
+                nn = Autoencoder(arch_fn(activation_fn))
+                nn.train(features, epochs=e)
+                nn.compress_all(features, filename)
