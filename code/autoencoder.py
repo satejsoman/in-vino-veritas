@@ -73,29 +73,23 @@ class Autoencoder():
         self.params = [z, a, w, b, f]
         logging.info("Finished")
 
-    def compress(self, x):
+    def compress(self, x, offset=1):
         z, a, w, b, f = self.params
         L = len(self.layers)
         n = x.shape[0] 
         apred = {0: np.array(x).reshape((n, 1))}
-        for l in range(1, L):
+        for l in range(1, L - offset + 1):
             apred[l] = f[l](w[l] @ apred[l-1] + b[l])
-        return apred[L-1]
+        return apred[L-offset]
 
-    def compress_all(self, xs, out_path):
+    def compress_all(self, xs, out_path, offset=1):
         logging.info("Compressing input of size %s", xs.shape)
-        out = np.vstack([self.compress(row).T for (_, row) in tqdm(xs.iterrows())])
+        out = np.vstack([self.compress(row, offset).T for (_, row) in tqdm(xs.iterrows())])
         logging.info("Writing out compressed output")
         np.savetxt(out_path, out, delimiter=",")
         
 
-if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s|%(levelname)s| %(message)s", datefmt='%Y-%m-%d %H:%M:%S')
-    logging.getLogger().setLevel("INFO")
-
-    logging.info("Reading in data")
-    features = pd.read_csv("data/features.csv", header=None)
-
+def initial_grid_search(features):
     deep = lambda fn: [
         (fn, (10000, 26023)),
         (fn, (5000, 10000)),
@@ -112,9 +106,11 @@ if __name__ == "__main__":
         (fn, (26023, 50))
     ]
 
-    shallow = lambda fn: [(fn, (50, 26023)), (fn, (26023, 50))]
+    shallow = lambda fn: [
+        (fn, (50, 26023)), 
+        (fn, (26023, 50))
+    ]
 
-    # test out some architecutures and training cycles
     epochs = [10, 100, 1000, 10000]
     architectures = {"shallow": shallow, "medium": medium, "deep": deep}
     activation_functions = {"sigmoid": activations.sigmoid, "relu": activations.relu}
@@ -128,3 +124,38 @@ if __name__ == "__main__":
                 nn = Autoencoder(arch_fn(activation_fn))
                 nn.train(features, epochs=e)
                 nn.compress_all(features, filename)
+
+def mixed_grid_search(features):
+    relu_sigmoid_out = Autoencoder([
+        (activations.relu, (10000, 26023)),
+        (activations.relu, (1000, 10000)),
+        (activations.relu, (50, 1000)),
+        (activations.sigmoid, (26023, 50))
+    ])
+
+    symmetric_sigmoid = Autoencoder([
+        (activations.sigmoid, (10000, 26023)),
+        (activations.sigmoid, (1000,  10000)),
+        (activations.sigmoid, (50,    1000)),
+        (activations.sigmoid, (1000,  50)),
+        (activations.sigmoid, (10000, 1000)),
+        (activations.sigmoid, (26023, 10000))
+    ])
+
+    logging.info("training relu_sigmoid_out")
+    relu_sigmoid_out.train(features, epochs=100)
+    relu_sigmoid_out.compress_all(features, "data/compressed_{}_{}_{}.csv".format("relu", "sigmoid_out", 100))
+    
+    logging.info("training symmetric sigmoid")
+    symmetric_sigmoid.train(features, epochs=100)
+    symmetric_sigmoid.compress_all(features, "data/compressed_{}_{}_{}.csv".format("sigmoid", "symmetric", 100), offset=3)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s|%(levelname)s| %(message)s", datefmt='%Y-%m-%d %H:%M:%S')
+    logging.getLogger().setLevel("INFO")
+
+    logging.info("Reading in data")
+    features = pd.read_csv("data/features.csv", header=None)
+    mixed_grid_search(features)
+
