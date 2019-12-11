@@ -28,14 +28,6 @@
 
 \title{Comparison of Dimensionality Reduction Techniques}
 
-% The \author macro works with any number of authors. There are two commands
-% used to separate the names and addresses of multiple authors: \And and \AND.
-%
-% Using \And between authors leaves it to LaTeX to determine where to break the
-% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
-% authors names on the first line, and the last on the second line, try using
-% \AND instead of \And before the third author name.
-
 \author{%
   Jonathan Tan \\
   Harris School of Public Policy\\
@@ -59,15 +51,17 @@
 \end{abstract}
 
 \section{Background}
-Dimensionality reduction is an important technique to render high-dimensional datasets more tractable for analysis. Often, in a dataset containing thousands of columns, a small number of those columns are relevant for an analytical task. Robust techniques for identifying the most salient feature techniques allow for more compact representations of data, reducing storage costs and analysis time. [insert reference XXXX]
+Dimensionality reduction is an important technique to render high-dimensional datasets more tractable for analysis. Often, in a dataset containing thousands of columns, a small number of those columns are relevant for an analytical task. Robust techniques for identifying the most salient features allow for more compact representations of data, reducing storage costs and analysis time. [insert reference XXXX]
 
 \section{Techniques studied}
 \subsection{Principal components analysis}
-Principle components analysis is 
+Principal component analysis is a dimensionality reduction technique built upon the singular value decomposition (SVD) of a feature matrix. Specifically, the SVD produces matrices $X = U \Sigma V^T$ such that the right singular vectors of $X$, i.e. the columns of $V$, give the principal component directions of $X$. We can obtain a lower-dimensional representation of the original features by projecting the data onto the first $n$ principal component directions. [2] Below, we vary the number of principal components used to predict wine scores and observe how mean squared error between predicted and true wine scores vary with $n$.
 \subsection{Autoencoders}
-In contrast, autoencoders seek to map inputs to a \emph{non-linear} input manifold.
+In contrast, autoencoders seek to map inputs to a \emph{non-linear} input manifold. 
 
-We test autoencoders with both logistic activation as well as ReLU activation.
+All of our autoencoders produced output vectors of length 50. We trained neural networks with three main architectures. The shallowest was simply a 50-layer hidden layer in between an input and output layer. The deeper networks we tested progressively stepped the input size down. Most of our architectures had only a single decoding layer.
+
+To train the networks, we used stochastic gradient descent over a variable number of training epochs. To maintain decoded fidelity, our output node delta for the update step was proportional to the difference in input and output vectors [insert reference XXXX]. 
 \section{Dataset}
 \subsection{Description}
 We use a dataset of wine reviews from Kaggle [insert reference XXXX] consisting mostly of categorical and text data, each with an associated wine review score on a scale of 80 - 100. The features include a free-text description of the wine, as well as pre-parsed information about the wine, including type, grape variety, region of origin, and winery. The key continuous, numeric column in the feature set is the price of each wine bottle. The label we seek to recover is the wine review score.
@@ -79,35 +73,81 @@ The bag-of-words model gives a particularly sparse matrix, and we faced initial 
 
 In the future, other numeric representations of text data could be interesting to explore, e.g. low-dimensional word embeddings produced by neural network-based algorithms such as \verb+word2vec+ or \verb+GloVe+. [insert reference XXXX] 
 \section{Methodology}
-For each technique, we apply the dimensionality reduction to obtain a reduced set of feature vectors ($X_j$). We then regress wine price ($P_i$) on these reduced features and look at the mean-squared error. 
+For each technique, we apply the dimensionality reduction to obtain a reduced set of feature vectors ($X_j$). We then regress wine score ($S_i$) on these reduced features to estimate the least squares weights for the reduced feature set and then calculate predicted scores from the learned weights. Finally, we compare the mean-squared error arising from the true vs. predicted wine scores for several dimensionality reduction techniques.
 
 \section{Results}
+\begin{table}
+    \centering
+\begin{tabular}{llr}
+\toprule
+     method &                     description &          MSE \\
+\midrule
+autoencoder &   sigmoid, shallow, 1000 epochs &     5.649318 \\
+autoencoder &  sigmoid, shallow, 10000 epochs &     5.649318 \\
+autoencoder &     sigmoid, shallow, 10 epochs &     5.649318 \\
+autoencoder &    sigmoid, shallow, 100 epochs &     5.649318 \\
+autoencoder &  sigmoid, symmetric, 100 epochs &     5.653316 \\
+autoencoder &    sigmoid, medium, 1000 epochs &     5.653316 \\
+autoencoder &      sigmoid, medium, 10 epochs &     5.653316 \\
+autoencoder &     sigmoid, medium, 100 epochs &     5.653316 \\
+autoencoder &   sigmoid, medium, 10000 epochs &     5.653316 \\
+autoencoder &     sigmoid, deep, 10000 epochs &     5.665386 \\
+autoencoder &      sigmoid, deep, 1000 epochs &     5.665386 \\
+autoencoder &       sigmoid, deep, 100 epochs &     5.665386 \\
+autoencoder &        sigmoid, deep, 10 epochs &     5.665386 \\
+        pca &                  100 components &   231.751525 \\
+        pca &                   50 components &   307.355949 \\
+        pca &                   25 components &   366.782639 \\
+        pca &                   20 components &   399.109070 \\
+        pca &                   15 components &   412.171071 \\
+        pca &                   10 components &   426.216375 \\
+        pca &                    5 components &   481.270942 \\
+        pca &                    3 components &   484.869192 \\
+        pca &                    2 components &   516.873620 \\
+autoencoder &        ReLU, deep, 10000 epochs &  1074.289408 \\
+autoencoder &         ReLU, deep, 1000 epochs &  1074.289408 \\
+autoencoder &          ReLU, deep, 100 epochs &  1074.289408 \\
+autoencoder &           ReLU, deep, 10 epochs &  1074.289408 \\
+autoencoder &        ReLU, shallow, 10 epochs &  1732.283164 \\
+autoencoder &       ReLU, shallow, 100 epochs &  1732.283164 \\
+autoencoder &      ReLU, shallow, 1000 epochs &  1732.283164 \\
+autoencoder &     ReLU, shallow, 10000 epochs &  1732.283164 \\
+autoencoder &      ReLU, medium, 10000 epochs &  1742.411749 \\
+autoencoder &       ReLU, medium, 1000 epochs &  1742.411749 \\
+autoencoder &        ReLU, medium, 100 epochs &  1742.411749 \\
+autoencoder &         ReLU, medium, 10 epochs &  1742.411749 \\
+autoencoder &    ReLU, sigmoidOut, 100 epochs &  1742.411749 \\
+        pca &                    1 components &  4524.018520 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Conclusions}
+\begin{itemize}
+\item Autoencoders with logistic activation performed the best at dimensionality reduction (according to our regression mean-squared error metric), followed by regular principal-components analysis.
+\item Neural networks with only ReLU activations do not perform well for dimensionality reduction, compared to other techniques we looked at.
+\item For the architectures we studied, varying the number of training epochs did not change the mean-squared error. 
+\item Neither combining layers with different activation functions (input and hidden ReLU and sigmoid output), nor adding symmetric decoding layers improved autoencoder performance.
+\end{itemize}
 \section{Future work}
 
-There are a number of ways this work can be extended. As dicussed above, we could use alternate encoding schemes for the free-text data. More interesting lines of inquiry involve either different neural-network architectures, different loss functions, or alternative reduction techniques.
+There are a number of ways this work can be extended. As dicussed above, we could use alternate encoding schemes for the free-text data. Additional lines of inquiry involve either different neural-network architectures, different loss functions, or alternative dimensionality reduction techniques.
 
-Our neural networks were not symmetric; after a number of encoding layers, we simply had one decoding layer and penalized the neural network for its inability to recover the original input vector. Autoencoders with the same number of input and output layers likely allow for more precise decoding and thus faster convergence in training. 
+We could have used regression mean-squared error as the loss function when training neural networks, but there is not a clear analog of this when doing principal-components analysis, so we opted to simply force the decoded output to be as close as possible to the unencoded input.
 
-Additionally, we could have used regression mean-squared error as the loss function when training neural networks, but there is not a clear analog of this when doing principal-components analysis, so we opted to simply force the decoded output to be as close as possible to the unencoded input.
-
-Finally, we hoped to compare the techniques discussed to another technique called t-Distributed Stochastic Neighbor Embedding (t-SNE) [insert reference XXXX]. 
+Further, we had hoped to compare the methods discussed to another technique called t-Distributed Stochastic Neighbor Embedding (t-SNE) [insert reference XXXX]. Other uses of this technique, which specifically targets two- or three-dimensional representations of high-dimensional data. These techniques exist on a spectrum of stochasticity: PCA is deterministic, while autoencoders have stochastic elements, and t-SNE is completely stochastic and very sensitive to hyperparameter tuning.
 
 \section*{References}
 \small
 
-[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms for
-connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and T.K.\ Leen
-(eds.), {\it Advances in Neural Information Processing Systems 7},
-pp.\ 609--616. Cambridge, MA: MIT Press.
+[1] Wine Reviews (2017). {\it Accessed at https://kaggle.com/zynicide/wine-reviews}. Last accessed Dec 2, 2019.
 
-[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS: Exploring
-  Realistic Neural Models with the GEneral NEural SImulation System.}  New York:
-TELOS/Springer--Verlag.
+[1] Mikolov, T., Chen, K., Corrado, G. \& Dean, J. (2013) Efficient Estimation of Word Representations in Vector Space. {\it Accessed at https://arXiv:1301.3781}. Last accessed Dec 10, 2019.
 
-[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of learning and
-recall at excitatory recurrent synapses and cholinergic modulation in rat
-hippocampal region CA3. {\it Journal of Neuroscience} {\bf 15}(7):5249-5262.
+[2] Elden, L. (2007). {\it Matrix Methods in Data Mining and Pattern Recognition}, pp. 66. Philadelphia, PA:  Society for Industrial and Applied Mathematics.
+
+[3] Hinton, G.E. \& Salakhutdinov, R.R. Reducing the dimensionality of data with neural networks. {\it Science}, 313(5786):504–507, 2006.
+
 
 % \section{Original}
 
