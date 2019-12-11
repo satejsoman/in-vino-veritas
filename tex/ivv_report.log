@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.07.0 (TeX Live 2018)  (format=lualatex 2018.4.16)  10 DEC 2019 20:52
+This is LuaTeX, Version 1.07.0 (TeX Live 2018)  (format=lualatex 2018.4.16)  10 DEC 2019 21:02
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/Users/satej/Documents/workspace/classwork/math-ml/in-vino-veritas/tex/ivv_report.tex
@@ -23,7 +23,7 @@ Inserting `luaotfload.aux.patch_cambria_domh' at position 2 in `luaotfload.patch
 Inserting `luaotfload.aux.fixup_fontdata' at position 1 in `luaotfload.patch_font_unsafe'.
 Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font'.
 Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'.
-luaotfload | main : initialization completed in 0.114 seconds
+luaotfload | main : initialization completed in 0.113 seconds
 Babel <3.18> and hyphenation patterns for 1 language(s) loaded.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
@@ -435,56 +435,56 @@ Missing character: There is no ” (U+201D) in font ptmr8t!
 <../images/pca_mse_vs_k.png, id=73, 433.62pt x 433.62pt>
 File: ../images/pca_mse_vs_k.png Graphic file (type png)
 <use ../images/pca_mse_vs_k.png>
-Package luatex.def Info: ../images/pca_mse_vs_k.png  used on input line 141.
+Package luatex.def Info: ../images/pca_mse_vs_k.png  used on input line 139.
 (luatex.def)             Requested size: 278.23827pt x 278.25027pt.
 <../images/aenn_results_sigmoid.png, id=74, 433.62pt x 433.62pt>
 File: ../images/aenn_results_sigmoid.png Graphic file (type png)
 <use ../images/aenn_results_sigmoid.png>
-Package luatex.def Info: ../images/aenn_results_sigmoid.png  used on input line 148.
+Package luatex.def Info: ../images/aenn_results_sigmoid.png  used on input line 146.
 (luatex.def)             Requested size: 278.23827pt x 278.25027pt.
 <../images/aenn_results_relu.png, id=75, 433.62pt x 433.62pt>
 File: ../images/aenn_results_relu.png Graphic file (type png)
 <use ../images/aenn_results_relu.png>
-Package luatex.def Info: ../images/aenn_results_relu.png  used on input line 155.
+Package luatex.def Info: ../images/aenn_results_relu.png  used on input line 153.
 (luatex.def)             Requested size: 278.23827pt x 278.25027pt.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 162.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 160.
  (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 162.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 160.
  [3] [4<../images/pca_mse_vs_k.png><../images/aenn_results_sigmoid.png>]
-Overfull \hbox (47.29416pt too wide) in paragraph at lines 180--181
-[]\T1/lmtt/m/n/9 https://lvdmaaten.github.io/publications/papers/TR_Dimensionality\_Reduction\_Review\_2009.pdf\T1/ptm/m/n/9 .
+Overfull \hbox (33.11919pt too wide) in paragraph at lines 178--179
+[]\T1/lmtt/m/n/9 https://lvdmaaten.github.io/publications/papers/TR_Dimensionality_Reduction_Review_2009.pdf\T1/ptm/m/n/9 .
  []
 
 [5
 Missing character: There is no – (U+2013) in font ptmr8t!
 <../images/aenn_results_relu.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 519.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 194.
  [6
 Missing character: There is no – (U+2013) in font ptmr8t!
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 519.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 194.
  (/Users/satej/Documents/workspace/classwork/math-ml/in-vino-veritas/tex/ivv_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 519.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 519.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 194.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 194.
 Package rerunfilecheck Info: File `ivv_report.out' has not changed.
 (rerunfilecheck)             Checksum: 24BCAD412528943BCFD66218E37006D3;583.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 519.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 194.
 )
 
 Here is how much of LuaTeX's memory you used:
  8337 strings out of 494413
  100000,266212 words of node,token memory allocated
- 958 words of node memory still in use:
-   2 hlist, 1 vlist, 1 rule, 4 glue, 82 kern, 39 attribute, 52 glue_spec, 39 attribute_list, 1 write nodes
-   avail lists: 2:687,3:78,4:36,5:94,6:17,7:4574,8:58,9:235,10:21,11:354
+ 961 words of node memory still in use:
+   2 hlist, 1 vlist, 1 rule, 4 glue, 81 kern, 41 attribute, 52 glue_spec, 41 attribute_list, 1 write nodes
+   avail lists: 2:694,3:79,4:37,5:99,6:19,7:4727,8:58,9:236,10:21,11:370
  12116 multiletter control sequences out of 65536+600000
  68 fonts using 4422775 bytes
  31i,8n,38p,722b,397s stack positions out of 5000i,500n,10000p,200000b,100000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/lm/lmtt9.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ivv_report.pdf (6 pages, 358283 bytes).
+Output written on ivv_report.pdf (6 pages, 358340 bytes).
 
 PDF statistics: 137 PDF objects out of 1000 (max. 8388607)
  112 compressed objects within 2 object streams
